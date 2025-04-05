@@ -55,7 +55,8 @@ jobs:
     needs: rebase_and_push  # Chạy sau khi rebase and push thành công
 
     steps:
-      - name: Close pull request
+      # Bước 6: Đóng Pull Request
+      - name: Close merged pull request
         run: |
           PR_NUMBER=${{ github.event.pull_request.number }}
           REPO=${{ github.repository }}
@@ -63,4 +64,4 @@ jobs:
           curl -X PATCH \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -d '{"state": "closed"}' \
-            https://api.github.com/repos/$REPO/p
+            https://api.github.com/repos/$REPO/pulls/$PR_NUMBER
