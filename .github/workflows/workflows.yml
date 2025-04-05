@@ -49,20 +49,6 @@ jobs:
           git push origin HEAD:main
         if: success()  # Chỉ thực hiện nếu bước rebase thành công
 
-      # Bước 6: Pull tất cả các nhánh và rebase chúng với main
-      - name: Pull all branches and rebase with main
-        run: |
-          # Lấy tất cả các nhánh từ remote
-          git fetch --all
-          
-          # Lấy danh sách tất cả các nhánh từ remote
-          for branch in $(git branch -r | grep -v 'main' | grep -v 'HEAD' | sed 's/origin\///'); do
-            echo "Rebasing $branch onto main..."
-            git checkout $branch
-            git rebase origin/main
-            git push origin $branch
-          done
-
   close_pr:
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
@@ -77,4 +63,4 @@ jobs:
           curl -X PATCH \
             -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
             -d '{"state": "closed"}' \
-            https://api.github.com/repos/$REPO/pulls/$PR_NUMBER
+            https://api.github.com/repos/$REPO/p
